@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.repos.observe(this, Observer { pagedList ->
             Timber.d("Receive Result")
-            adapter.setList(pagedList)
+            adapter.submitList(pagedList)
         })
 
         viewModel.networkState.observe(this, Observer { networkState ->
