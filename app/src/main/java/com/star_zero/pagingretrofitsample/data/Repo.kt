@@ -1,10 +1,12 @@
 package com.star_zero.pagingretrofitsample.data
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class Repo(
-        @SerializedName("id")
-        val id: String,
-        @SerializedName("full_name")
-        val fullName: String)
-
+    @Json(name = "id")
+    val id: String,
+    @Json(name = "full_name")
+    val fullName: String
+)

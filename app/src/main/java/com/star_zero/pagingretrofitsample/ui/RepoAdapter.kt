@@ -1,39 +1,54 @@
 package com.star_zero.pagingretrofitsample.ui
 
-import android.arch.paging.PagedListAdapter
-import android.databinding.DataBindingUtil
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.star_zero.pagingretrofitsample.R
-import com.star_zero.pagingretrofitsample.data.Repo
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.star_zero.pagingretrofitsample.databinding.ItemRepoBinding
 
-class RepoAdapter : PagedListAdapter<Repo, RepoAdapter.ViewHolder>(DIFF_CALLBACK) {
+class RepoAdapter : PagingDataAdapter<UiModel, RepoAdapter.ViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ItemRepoBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_repo, parent, false)
+        val binding = ItemRepoBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindTo(getItem(position))
+        val model = getItem(position)
+        holder.bind(getItem(position)) {
+            model?.let {
+                it.favorite = !it.favorite
+                notifyItemChanged(position)
+            }
+        }
     }
 
     class ViewHolder(private val binding: ItemRepoBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bindTo(repo: Repo?) {
-            binding.repo = repo
+        fun bind(model: UiModel?, onClickFav: () -> Unit) {
+            binding.model = model
+            if (model == null) {
+                binding.buttonFav.setOnClickListener(null)
+            } else {
+                binding.buttonFav.setOnClickListener {
+                    onClickFav()
+                }
+            }
+            binding.executePendingBindings()
         }
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Repo>() {
-            override fun areItemsTheSame(oldItem: Repo, newItem: Repo): Boolean {
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<UiModel>() {
+            override fun areItemsTheSame(oldItem: UiModel, newItem: UiModel): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: Repo, newItem: Repo): Boolean {
+            override fun areContentsTheSame(oldItem: UiModel, newItem: UiModel): Boolean {
                 return oldItem == newItem
             }
         }
