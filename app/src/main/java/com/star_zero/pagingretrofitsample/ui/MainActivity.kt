@@ -24,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     val isRefreshing = MutableLiveData<Boolean>()
 
+    val isError = MutableLiveData<Boolean>()
+
     private val viewModel: MainViewModel by viewModels()
 
     private val adapter = RepoAdapter()
@@ -56,11 +58,16 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             adapter.loadStateFlow.collectLatest { loadState ->
                 isRefreshing.value = loadState.refresh is LoadState.Loading
+                isError.value = loadState.refresh is LoadState.Error
             }
         }
     }
 
     fun onRefresh() {
         adapter.refresh()
+    }
+
+    fun retry() {
+        adapter.retry()
     }
 }

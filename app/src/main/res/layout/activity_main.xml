@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="activity"
             type="com.star_zero.pagingretrofitsample.ui.MainActivity" />
@@ -19,6 +21,7 @@
             android:id="@+id/swipe_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="@{activity.isError ? View.GONE : View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,5 +35,17 @@
                 android:layout_height="match_parent"
                 tools:listitem="@layout/item_repo" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <Button
+            android:id="@+id/button_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> activity.retry()}"
+            android:text="RETRY"
+            android:visibility="@{activity.isError ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
