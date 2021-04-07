@@ -1,6 +1,7 @@
 package com.star_zero.pagingretrofitsample.paging
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import com.star_zero.pagingretrofitsample.api.GitHubAPI
 import com.star_zero.pagingretrofitsample.data.Repo
 import timber.log.Timber
@@ -40,5 +41,9 @@ class RepoPagingSource(
             Timber.w(e)
             LoadResult.Error(e)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, Repo>): Int? {
+        return null
     }
 }
